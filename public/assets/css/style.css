@@ -1,0 +1,177 @@
+@import url(./fontiran.css);
+*{
+  font-family: IRANSansXFaNum;
+}
+:root {
+  /* 🎨 Brand Colors */
+  --color-primary: #F32970;
+  --color-primary-hover: #D91E60;
+  --color-primary-light: #FFF0F5;
+  --color-primary-soft: #FCE1EA;
+
+  /* 🌸 Secondary Colors */
+  --color-secondary: #F8B8CC;
+  --color-secondary-light: #FFF7FA;
+  --color-accent: #FF5B91;
+
+  /* 🤍 Background Colors */
+  --color-background: #FFFFFF;
+  --color-background-soft: #FFF8FA;
+  --color-background-pink: #FFF0F4;
+  --color-surface: #FFFFFF;
+  --color-surface-hover: #FFF5F8;
+
+  /* 🖤 Text Colors */
+  --color-text: #20232C;
+  --color-text-secondary: #6B6670;
+  --color-text-muted: #96909A;
+  --color-text-inverse: #FFFFFF;
+
+  /* 🌑 Dark Section / Footer */
+  --color-dark: #101B20;
+  --color-dark-secondary: #17252B;
+  --color-dark-text: #F8F5F7;
+
+  /* 🩶 Border Colors */
+  --color-border: #F0E5E9;
+  --color-border-light: #F8EDF1;
+  --color-border-focus: #F32970;
+
+  /* 🟢 Status Colors */
+  --color-success: #21966B;
+  --color-warning: #F2A93B;
+  --color-error: #E5484D;
+  --color-info: #3984D6;
+
+  /* 🌈 Gradients */
+  --gradient-primary: linear-gradient(
+    135deg,
+    #F32970 0%,
+    #FF6597 100%
+  );
+
+  --gradient-hero: linear-gradient(
+    90deg,
+    #FFF0F5 0%,
+    #FFE4ED 50%,
+    #FFF8FA 100%
+  );
+
+  /* 🌫️ Shadows */
+  --shadow-sm: 0 2px 8px #f329700f;
+  --shadow-md: 0 4px 16px #f329701a;
+  --shadow-lg: 0 8px 28px #20232c1a;
+}
+html {
+   scroll-behavior: smooth;
+}
+body {
+  background: var(--color-background);
+  color: var(--color-text);
+}
+.btn-primary {
+  background: var(--color-primary);
+  color: var(--color-text-inverse);
+  border: none;
+  border-radius: var(--radius-full);
+  padding: 12px 24px;
+  transition: background 0.2s ease;
+}
+
+.btn-primary:hover {
+  background: var(--color-primary-hover);
+}
+.product-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.product-card:hover {
+  box-shadow: var(--shadow-md);
+}
+.hero-banner {
+  background: var(--gradient-hero);
+  border-radius: var(--radius-xl);
+}
+
+.btn-ripple {
+    position: relative;
+    /* overflow: hidden; */
+}
+.btn-ripple::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: var(--color-primary);
+    transform: translate(-50%, -50%);
+    transition: width 2s, height 0.1s;
+}
+.btn-ripple:hover::after {
+    width: 70px;
+    height: 3px;
+}
+.labal_1:hover .labal_1-1{
+    visibility: visible;
+    max-height: 300px;
+}
+.labal_2:hover .labal_1-2{
+    visibility: visible;
+    max-height: 300px;
+}
+.labal_acant:hover .labal_acant-hover{
+    visibility: visible;
+    max-height: 300px;
+}
+.labal_carts:hover .labal_carts-hover{
+    visibility: visible;
+    max-height: 500px;
+}
+.slider {
+    position: relative;
+    border-radius: 35px;
+    object-fit: cover;
+    margin: auto;
+    overflow: hidden;
+}
+
+.slides {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+}
+
+.slide {
+    min-width: 100%;
+    /* background-size: cover; */
+    /* background-position: ; */
+}
+
+.prev, .next {
+    position: absolute;
+    z-index: 25;
+    top: 50%;
+    transform: translateY(-50%);
+    color: rgb(6, 6, 6);
+    border: none;
+    padding: 15px;
+    cursor: pointer;
+    font-size: 18px;
+}
+
+.prev { right: 10px; } 
+.next { left: 10px; }
+
+/* اگر می‌خواهید فلش‌ها هم معکوس شوند */
+.prev::after { content: '❮'; }
+.next::after { content: '❯'; }
+
+
+
+.category:hover {
+  box-shadow: 0 0 15px 1px var(--color-primary-hover);
+  border-color: var(--color-primary-hover);
+}
