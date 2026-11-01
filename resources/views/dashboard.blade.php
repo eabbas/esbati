@@ -406,8 +406,7 @@
                     <i class="fas fa-heartbeat"></i>
                 </div>
                 <div>
-                    <h1 class="text-xl font-bold text-white">وفادار طب</h1>
-                    <p class="text-xs text-[#9A9CAE]">تجهیزات پزشکی و طبی</p>
+                    <h1 class="text-xl font-bold text-white"> اکسسوری اثباتی</h1>
                 </div>
             </div>
 
@@ -436,13 +435,13 @@
                                 <svg class='size-4 fill-[#059669]' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
                                     <path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"/>
                                 </svg>
-                                <a href="#" class="hover:text-white transition-colors font-medium">ایجاد آدرس جدید</a>
+                                <a href="{{route('address.create')}}" class="hover:text-white transition-colors font-medium">ایجاد آدرس جدید</a>
                             </div>
                             <div class='w-12/12 justify-start text-white flex p-2 text-base gap-2 sub-menu-item'>
                                 <svg class='size-4 fill-[#1B84FF]' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
                                     <path d="M40 48C26.7 48 16 58.7 16 72v48c0 13.3 10.7 24 24 24H88c13.3 0 24-10.7 24-24V72c0-13.3-10.7-24-24-24H40zM192 64c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zm0 160c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zm0 160c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zM16 232v48c0 13.3 10.7 24 24 24H88c13.3 0 24-10.7 24-24V232c0-13.3-10.7-24-24-24H40c-13.3 0-24 10.7-24 24zM40 368c-13.3 0-24 10.7-24 24v48c0 13.3 10.7 24 24 24H88c13.3 0 24-10.7 24-24V392c0-13.3-10.7-24-24-24H40z"/>
                                 </svg>
-                                <a href="#" class="hover:text-white transition-colors font-medium">لیست آدرس ها</a>
+                                <a href="{{route('address.list')}}" class="hover:text-white transition-colors font-medium">لیست آدرس ها</a>
                             </div>
                         </div>
                     </div>
@@ -463,7 +462,7 @@
                                 <svg class='size-4 fill-[#1B84FF]' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
                                     <path d="M40 48C26.7 48 16 58.7 16 72v48c0 13.3 10.7 24 24 24H88c13.3 0 24-10.7 24-24V72c0-13.3-10.7-24-24-24H40zM192 64c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zm0 160c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zm0 160c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zM16 232v48c0 13.3 10.7 24 24 24H88c13.3 0 24-10.7 24-24V232c0-13.3-10.7-24-24-24H40c-13.3 0-24 10.7-24 24zM40 368c-13.3 0-24 10.7-24 24v48c0 13.3 10.7 24 24 24H88c13.3 0 24-10.7 24-24V392c0-13.3-10.7-24-24-24H40z"/>
                                 </svg>
-                                <a href="#" class="hover:text-white transition-colors font-medium">لیست سفارش ها</a>
+                                <a href="{{route('order.list')}}" class="hover:text-white transition-colors font-medium">لیست سفارش ها</a>
                             </div>
                         </div>
                     </div>
@@ -488,13 +487,13 @@
                                 <svg class='size-4 fill-[#059669]' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
                                     <path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"/>
                                 </svg>
-                                <a href="#" class="hover:text-white transition-colors font-medium">ایجاد محصول جدید</a>
+                                <a href="{{route('product.create')}}" class="hover:text-white transition-colors font-medium">ایجاد محصول جدید</a>
                             </div>
                             <div class='w-12/12 justify-start text-white flex p-2 text-base gap-2 sub-menu-item'>
                                 <svg class='size-4 fill-[#1B84FF]' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
                                     <path d="M40 48C26.7 48 16 58.7 16 72v48c0 13.3 10.7 24 24 24H88c13.3 0 24-10.7 24-24V72c0-13.3-10.7-24-24-24H40zM192 64c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zm0 160c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zm0 160c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zM16 232v48c0 13.3 10.7 24 24 24H88c13.3 0 24-10.7 24-24V232c0-13.3-10.7-24-24-24H40c-13.3 0-24 10.7-24 24zM40 368c-13.3 0-24 10.7-24 24v48c0 13.3 10.7 24 24 24H88c13.3 0 24-10.7 24-24V392c0-13.3-10.7-24-24-24H40z"/>
                                 </svg>
-                                <a href="#" class="hover:text-white transition-colors font-medium">لیست محصولات</a>
+                                <a href="{{route('product.list')}}" class="hover:text-white transition-colors font-medium">لیست محصولات</a>
                             </div>
 
                         </div>
@@ -518,13 +517,13 @@
                                 <svg class='size-4 fill-[#059669]' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
                                     <path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"/>
                                 </svg>
-                                <a href="#" class="hover:text-white transition-colors font-medium">ایجاد کد تخفیف جدید</a>
+                                <a href="{{route('discuntCode.create')}}" class="hover:text-white transition-colors font-medium">ایجاد کد تخفیف جدید</a>
                             </div>
                             <div class='w-12/12 justify-start text-white flex p-2 text-base gap-2 sub-menu-item'>
                                 <svg class='size-4 fill-[#1B84FF]' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
                                     <path d="M40 48C26.7 48 16 58.7 16 72v48c0 13.3 10.7 24 24 24H88c13.3 0 24-10.7 24-24V72c0-13.3-10.7-24-24-24H40zM192 64c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zm0 160c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zm0 160c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zM16 232v48c0 13.3 10.7 24 24 24H88c13.3 0 24-10.7 24-24V232c0-13.3-10.7-24-24-24H40c-13.3 0-24 10.7-24 24zM40 368c-13.3 0-24 10.7-24 24v48c0 13.3 10.7 24 24 24H88c13.3 0 24-10.7 24-24V392c0-13.3-10.7-24-24-24H40z"/>
                                 </svg>
-                                <a href="#" class="hover:text-white transition-colors font-medium">لیست کد تخفیف</a>
+                                <a href="{{route('discuntCode.list')}}" class="hover:text-white transition-colors font-medium">لیست کد تخفیف</a>
                             </div>
 
                         </div>
@@ -548,13 +547,13 @@
                                 <svg class='size-4 fill-[#059669]' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
                                     <path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"/>
                                 </svg>
-                                <a href="#" class="hover:text-white transition-colors font-medium">ایجاد دسته بندی جدید</a>
+                                <a href="{{route('category.create')}}" class="hover:text-white transition-colors font-medium">ایجاد دسته بندی جدید</a>
                             </div>
                             <div class='w-12/12 justify-start text-white flex p-2 text-base gap-2 sub-menu-item'>
                                 <svg class='size-4 fill-[#1B84FF]' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
                                     <path d="M40 48C26.7 48 16 58.7 16 72v48c0 13.3 10.7 24 24 24H88c13.3 0 24-10.7 24-24V72c0-13.3-10.7-24-24-24H40zM192 64c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zm0 160c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zm0 160c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zM16 232v48c0 13.3 10.7 24 24 24H88c13.3 0 24-10.7 24-24V232c0-13.3-10.7-24-24-24H40c-13.3 0-24 10.7-24 24zM40 368c-13.3 0-24 10.7-24 24v48c0 13.3 10.7 24 24 24H88c13.3 0 24-10.7 24-24V392c0-13.3-10.7-24-24-24H40z"/>
                                 </svg>
-                                <a href="#" class="hover:text-white transition-colors font-medium">لیست دسته بندی ها</a>
+                                <a href="{{route('category.list')}}" class="hover:text-white transition-colors font-medium">لیست دسته بندی ها</a>
                             </div>
                         </div>
                     </div>
@@ -577,18 +576,18 @@
                                 <svg class='size-4 fill-[#059669]' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
                                     <path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"/>
                                 </svg>
-                                <a href="#" class="hover:text-white transition-colors font-medium">ایجاد برند جدید</a>
+                                <a href="{{route('brand.create')}}" class="hover:text-white transition-colors font-medium">ایجاد برند جدید</a>
                             </div>
                             <div class='w-12/12 justify-start text-white flex p-2 text-base gap-2 sub-menu-item'>
                                 <svg class='size-4 fill-[#1B84FF]' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
                                     <path d="M40 48C26.7 48 16 58.7 16 72v48c0 13.3 10.7 24 24 24H88c13.3 0 24-10.7 24-24V72c0-13.3-10.7-24-24-24H40zM192 64c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zm0 160c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zm0 160c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zM16 232v48c0 13.3 10.7 24 24 24H88c13.3 0 24-10.7 24-24V232c0-13.3-10.7-24-24-24H40c-13.3 0-24 10.7-24 24zM40 368c-13.3 0-24 10.7-24 24v48c0 13.3 10.7 24 24 24H88c13.3 0 24-10.7 24-24V392c0-13.3-10.7-24-24-24H40z"/>
                                 </svg>
-                                <a href="#" class="hover:text-white transition-colors font-medium">لیست برند</a>
+                                <a href="{{route('brand.list')}}" class="hover:text-white transition-colors font-medium">لیست برند</a>
                             </div>
                         </div>
                     </div>
                     <!-- =====  تنظیمات ===== -->
-                    <div class='element flex flex-col items-center gap-2 px-4 py-3 rounded-xl bg-[#1a1a20] shadow-sm hover:shadow-md transition-all mb-3'>
+                    <!-- <div class='element flex flex-col items-center gap-2 px-4 py-3 rounded-xl bg-[#1a1a20] shadow-sm hover:shadow-md transition-all mb-3'>
                         <div class='flex w-full justify-between items-center text-center cursor-pointer'>
                             <div class='flex items-center gap-2 text-white text-base font-medium'>
                                 <svg class='section-icon' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="#d97706">
@@ -768,7 +767,7 @@
                             </div>
                         </div>
 
-                    </div>
+                    </div> -->
 
                     <!-- =====  کاربر ===== -->
                     <div class='element flex flex-col items-center gap-2 px-4 py-3 rounded-xl bg-[#1a1a20] shadow-sm hover:shadow-md transition-all mb-3'>
