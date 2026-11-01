@@ -4,6 +4,13 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\PermisionController;
+use App\Http\Controllers\ProductController;
+use App\Http\Controllers\CartController;
+use App\Http\Controllers\OrderController;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\BrandController;
+use App\Http\Controllers\DiscuntCodeController;
+use App\Http\Controllers\AddressController;
 use App\Http\Middleware\checkAuthUser;
 use App\Http\Middleware\checkUserExist;
 Route::get('/', function () {
@@ -70,4 +77,108 @@ Route::group([
     Route::get('/get/permision/users/{permision}','getUsers')->name('getUsers');
     Route::get('/get/permision/roles/{permision}','getroles')->name('getroles');
 
+});
+
+
+route::group([
+    'prefix'=>'product',
+    'as'=>'product.',
+    'controller'=>ProductController::class,
+],function(){
+    Route::get('/create','create')->name('create');
+    Route::post('/store','store')->name('store');
+    Route::post('/searchProduct','searchProduct')->name('searchProduct');
+    Route::get('/list','list')->name('list');
+    Route::get('/single/product/{product}','single')->name('single');
+    Route::get('/single/package/{package}','singlePackage')->name('singlePackage');
+    Route::get('/edit/{product}','edit')->name('edit');
+    Route::post('/update/{product}','update')->name('update');
+    Route::get('/delete/{product}','delete')->name('delete');
+    Route::get('category/attributes/{category}','categoryAttributes')->name('categoryAttributes');
+    Route::get('/packages/{product}','packages')->name('packages');
+    Route::get('/attributes/{product}','attributes')->name('attributes');
+    // Route::post('/get/filtered/products','getFilteredProducts')->name('getFilteredProducts');
+    Route::post('/get/filtered/products','getFilters')->name('getFilters');
+
+    
+    Route::get('/client/product/{product}','client_pro_single')->name('client_pro_single');
+    Route::get('/header/test','header_test')->name('header_test');
+
+    Route::get('/get/noAuth/{product}','getNoAuthProduct')->name('getNoAuthProduct');
+});
+route::group([
+    'prefix'=>'cart',
+    'as'=>'cart.',
+    'controller'=>CartController::class,
+],function(){    
+    Route::post('/store/cart','store')->name('store');
+    Route::post('/update/cart/{cart}','update')->name('update');
+    Route::get('/delete/cart/{cart}','delete')->name('delete');
+    Route::get('/list/cart','list')->name('list');
+    Route::get('/user/cart/list','userCartList')->name('userCartList');
+    Route::post('/checkOutForm','checkOutForm')->name('checkOutForm');
+});
+route::group([
+    'prefix'=>'order',
+    'as'=>'order.',
+    'controller'=>OrderController::class,
+],function(){    
+    Route::post('/store/order','store')->name('store');
+    Route::get('/list/order','list')->name('list');
+    Route::get('/edit/order','edit')->name('edit');
+    Route::post('/update/order','update')->name('update');
+    Route::get('/delete/order','delete')->name('delete');
+});
+route::group([
+    'prefix'=>'category',
+    'as'=>'category.',
+    'controller'=>CategoryController::class,
+],function(){
+    Route::get('/create','create')->name('create');
+    Route::post('/store','store')->name('store');
+    Route::get('/list','list')->name('list');
+    Route::get('/single/{category}','single')->name('single');
+    Route::get('/edit/{category}','edit')->name('edit');
+    Route::post('/update/{category}','update')->name('update');
+    Route::get('/delete/{category}','delete')->name('delete');
+});
+route::group([
+    'prefix'=>'brand',
+    'as'=>'brand.',
+    'controller'=>BrandController::class,
+],function(){
+    Route::get('/create','create')->name('create');
+    Route::post('/store','store')->name('store');
+    Route::get('/list','list')->name('list');
+    Route::get('/single/{brand}','single')->name('single');
+    Route::get('/edit/{brand}','edit')->name('edit');
+    Route::post('/update/{brand}','update')->name('update');
+    Route::get('/delete/{brand}','delete')->name('delete');
+});
+route::group([
+    'prefix'=>'discuntCode',
+    'as'=>'discuntCode.',
+    'controller'=>DiscuntCodeController::class,
+],function(){
+    Route::get('/create','create')->name('create');
+    Route::post('/store','store')->name('store');
+    Route::get('/list','list')->name('list');
+    Route::get('/edit/{discuntCode}','edit')->name('edit');
+    Route::post('/update/{discuntCode}','update')->name('update');
+    Route::get('/delete/{discuntCode}','delete')->name('delete');
+    Route::post('/checkCode','checkCode')->name('checkCode');
+});
+Route::group([
+    'prefix'=>'address',
+    'as'=>'address.',
+    'controller'=>AddressController::class,
+],function(){
+    Route::get('/create','create')->name('create');
+    Route::post('/store','store')->name('store');
+    Route::get('/list','list')->name('list');
+    Route::get('/get/address/{address}','getAddress')->name('getAddress');
+    Route::post('/update/{address}','update')->name('update');
+    Route::get('/delete/{address}','delete')->name('delete');
+    Route::post('/get/cities','getCities')->name('getCities');
+    Route::post('/create/ajax','createAjax')->name('createAjax');
 });
