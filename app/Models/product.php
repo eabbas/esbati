@@ -7,9 +7,6 @@ use App\Models\attribute;
 use App\Models\attribute_package;
 use App\Models\brand;
 use App\Models\category;
-use App\Models\package_attribute;
-use App\Models\package_media;
-use App\Models\package;
 use App\Models\permision;
 use App\Models\product_attribute;
 use App\Models\product_category;
@@ -32,6 +29,7 @@ class product extends Model
         'slug',
         'stock',
         'price',
+        'image',
         'discunt',
     ];
     public function brand(){
@@ -45,9 +43,6 @@ class product extends Model
     }
     public function attributes(){
         return $this->belongsToMany(attribute::class , 'product_attributes' , 'product_id' , 'attribute_id')->withPivot(['value','id']);
-    }
-    public function packages(){
-        return $this->hasMany(package::class);    
     }
     public function cart(){
         return $this->hasMany(cart::class);    

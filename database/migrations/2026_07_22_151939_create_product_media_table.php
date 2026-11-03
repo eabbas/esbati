@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id();
             $table->string("path");
             $table->string("product_id");
-            $table->string("is_main");
             $table->string("is_active");
             $table->string("type");
             $table->timestamps();

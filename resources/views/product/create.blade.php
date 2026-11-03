@@ -187,7 +187,7 @@
 
     /* ===== بخش ویژگی‌ها ===== */
     .vafadar-attributes-section {
-        background: #F5F5F5;
+        background: white;
         border-radius: 16px;
         padding: 16px 20px;
         border: 1px solid var(--metronic-border);
@@ -199,6 +199,29 @@
         font-weight: 700;
         padding: 10px 16px;
         background: linear-gradient(135deg, var(--metronic-primary), var(--metronic-primary-dark));
+        border-radius: 12px 12px 0 0;
+        text-align: center;
+        margin: -16px -20px 16px;
+        box-shadow: 0 4px 12px rgba(27, 132, 255, 0.15);
+    }
+
+    .vafadar-attributes-title1 {
+        color: #fff;
+        font-size: 16px;
+        font-weight: 700;
+        padding: 10px 16px;
+        background: linear-gradient(135deg, var(--metronic-primary), var(--metronic-primary-dark));
+        border-radius: 12px 12px 0 0;
+        text-align: center;
+        margin: -16px -20px 16px;
+        box-shadow: 0 4px 12px rgba(27, 132, 255, 0.15);
+    }
+    .vafadar-attributes-title2 {
+        color: #fff;
+        font-size: 16px;
+        font-weight: 700;
+        padding: 10px 16px;
+        background: linear-gradient(135deg, #EC407A, #F06292);
         border-radius: 12px 12px 0 0;
         text-align: center;
         margin: -16px -20px 16px;
@@ -507,25 +530,34 @@ $count=0
                 <div>
                     <label class="vafadar-label"> دسته بندی</label>
                     <select name="category" id="category_select_element" class="vafadar-select" onchange="categoryAttributes(this, true)">
-                        @foreach($categories as $category)
-                            @if($count==0)
-                                <option selected value="{{$category->id}}">{{$category->title}}</option>
-                                <?php $count++ ; ?>
-                            @else
-                                <option value="{{$category->id}}">{{$category->title}}</option>
-                            @endif
-                        @endforeach
+                        @if(count($categories)>0)
+                            @foreach($categories as $category)
+
+                                @if($count==0)
+                                    <option selected value="{{$category->id}}">{{$category->title}}</option>
+                                    <?php $count++ ; ?>
+                                @else
+                                    <option value="{{$category->id}}">{{$category->title}}</option>
+                                @endif
+                            @endforeach
+                        @else
+                            <option value="null">دسته بندی ثبت نشده</option>
+                        @endif
                     </select>
                 </div>
                 <!-- برند -->
                 <div>
                     <label class="vafadar-label"> برند</label>
                     <select name="brand_id" class="vafadar-select">
-                        @foreach($brands as $brand)
-                            @if($brand->is_active==1)
-                                <option value="{{$brand->id}}">{{$brand->title}}</option>
-                            @endif
-                        @endforeach
+                        @if(count($brands)>0)
+                            @foreach($brands as $brand)
+                                @if($brand->is_active==1)
+                                    <option value="{{$brand->id}}">{{$brand->title}}</option>
+                                @endif
+                            @endforeach
+                        @else
+                            <option value="null">برندی ثبت نشده</option>
+                        @endif
                     </select>
                 </div>
 
@@ -586,13 +618,23 @@ $count=0
 
             </div>
 
-            <!-- ===== بخش ویژگی‌ها ===== -->
+            <!-- ===== بخش ویژگی‌ها بر اساس دسته بندی===== -->
             <div class="vafadar-attributes-section mt-6">
-                <div class="vafadar-attributes-title"> ویژگی‌های محصول</div>
+                <div class="vafadar-attributes-title1"> ویژگی‌های محصول بر اساس دسته بندی</div>
                 
                 <div class="flex flex-wrap gap-2 mt-3" id="attributes_list"></div>
                 
                 <div class="vafadar-btn-success w-full mt-3" id="attribute_conformation_button" onclick="attribute_conformation(this)">
+                    ➕ افزودن ویژگی
+                </div>
+
+            </div>
+            <div class="vafadar-attributes-section mt-6">
+                <div class="vafadar-attributes-title2"> ویژگی‌های دستی برای محصول</div>
+                
+                <div class="flex flex-wrap gap-2 mt-3" id="product_attributes_list"></div>
+                
+                <div class="vafadar-btn-success w-full mt-3" id="add_pro_attribute_button" onclick="add_pro_attribute(this)">
                     ➕ افزودن ویژگی
                 </div>
 
@@ -695,7 +737,33 @@ $count=0
             }
         });
     }
-
+    let product_attributes_list=document.getElementById('product_attributes_list');
+    let add_pro_attribute_button=document.getElementById('add_pro_attribute_button');
+    function add_pro_attribute(el) {
+        let xmark = document.createElement('div');
+        let div= document.createElement('div');
+        let input2= document.createElement('input');
+        let input1= document.createElement('input');
+        div.classList=`relative w-full p-2 border-1 rounded-xl flex gap-2`;
+        input1.setAttribute('name', 'product_attributes_key[]');
+        input1.classList = 'vafadar-input attributes_inputs max-w-4/12 min-w-4/12 ';
+        input1.setAttribute('type', 'text');
+        input1.setAttribute('required', true);
+        input2.setAttribute('type', 'text');
+        input2.setAttribute('required', true);
+        input2.setAttribute('name', 'product_attributes_value[]');
+        input2.classList = 'vafadar-input attributes_inputs max-w-8/12 min-w-8/12';
+        input1.placeholder='نام ویژگی';
+        input2.placeholder='مقدار ویژگی';
+        xmark.classList = 'absolute remove top-0 -right-5 bg-red-300 hover:bg-red-500 p-1 rounded-full cursor-pointer';
+        xmark.innerHTML = '✕';
+        xmark.setAttribute('onclick', 'deleteAttribute(this)');
+        div.append(input1);
+        div.append(input2);
+        div.append(xmark);
+        product_attributes_list.append(div)
+        console.log(select.value)
+    }
     function attribute_conformation(el) {
         let xmark = document.createElement('div');
         let div= document.createElement('div');

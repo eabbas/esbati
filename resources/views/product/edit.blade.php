@@ -212,7 +212,17 @@
         margin: -16px -20px 16px;
         box-shadow: 0 4px 12px rgba(27, 132, 255, 0.15);
     }
-
+    .vafadar-attributes-title2 {
+        color: #fff;
+        font-size: 16px;
+        font-weight: 700;
+        padding: 10px 16px;
+        background: linear-gradient(135deg, #EC407A, #F06292);
+        border-radius: 12px 12px 0 0;
+        text-align: center;
+        margin: -16px -20px 16px;
+        box-shadow: 0 4px 12px rgba(27, 132, 255, 0.15);
+    }
     .vafadar-attr-item {
         position: relative;
         display: inline-flex;
@@ -682,11 +692,20 @@ $count = 1;
                 <div class="mt-4">
                     <h3 class="vafadar-label" style="font-size:15px;color:#1e293b;"> تصاویر موجود</h3>
                     <div class="vafadar-media-container">
+                        @if($product->image!=null)
+                            <div class="vafadar-media-item">
+                                <img src="{{asset('storage/product_medias/'.$product->image)}}" alt="">
+                                <span class=" vafadar-tag-main">
+                                    اصلی
+                                </span>
+                                <div onclick="getDeletedProductMedias(this, {{$product->id}})" class="vafadar-btn-danger" style="position:absolute;top:-6px;right:-6px;width:24px;height:24px;font-size:10px;">✕</div>
+                            </div>
+                        @endif
                         @foreach($product['medias'] as $media)
                             <div class="vafadar-media-item">
                                 <img src="{{asset('storage/product_medias/'.$media->path)}}" alt="">
-                                <span class="{{$media->is_main == 1 ? 'vafadar-tag-main' : 'vafadar-tag-gallery'}}">
-                                    {{$media->is_main == 1 ? 'اصلی' : 'گالری'}}
+                                <span class=" vafadar-tag-gallery">
+                                    گالری
                                 </span>
                                 <div onclick="getDeletedProductMedias(this, {{$media->id}})" class="vafadar-btn-danger" style="position:absolute;top:-6px;right:-6px;width:24px;height:24px;font-size:10px;">✕</div>
                             </div>
@@ -727,112 +746,16 @@ $count = 1;
                 </div>
 
             </div>
-
-            <!-- ===== پکیج‌های موجود ===== -->
-            @if(count($product['packages']) > 0)
-                <div class="mt-4">
-                    <h3 class="vafadar-label" style="font-size:15px;color:#1e293b;"> پکیج‌های موجود</h3>
-
-                    @foreach($product['packages'] as $package)
-                        <div class="vafadar-package-box" id="package-{{$package->id}}">
-                            <div class="package-title"> پک {{$product->title}}</div>
-                            <div class="package-grid">
-
-                                <div class="full">
-                                    <label class="vafadar-label"> تصویر اصلی</label>
-                                    <input type="file" name='createdPackages[{{$package->id}}][is_main]' class="vafadar-input" style="padding: 8px 12px;">
-                                </div>
-                                <div class="full">
-                                    <label class="vafadar-label"> گالری</label>
-                                    <input type="file" name='createdPackages[{{$package->id}}][gallery][]' multiple class="vafadar-input" style="padding: 8px 12px;">
-                                </div>
-                                <div>
-                                    <label class="vafadar-label"> توضیحات</label>
-                                    <input type="text"    name="createdPackages[{{$package->id}}][description]" value="{{$package->description}}" class="vafadar-input" placeholder="توضیحات">
-                                </div>
-                                <div>
-                                    <label class="vafadar-label"> خلاصه</label>
-                                    <input type="text" name="createdPackages[{{$package->id}}][summary]" value="{{$package->summary}}" class="vafadar-input" placeholder="خلاصه">
-                                </div>
-                                <div>
-                                    <label class="vafadar-label"> موجودی</label>
-                                    <input type="number"    name="createdPackages[{{$package->id}}][stock]" value="{{$package->stock}}" class="vafadar-input" placeholder="موجودی">
-                                </div>
-                                <div>
-                                    <label class="vafadar-label"> قیمت</label>
-                                    <input type="number"    name="createdPackages[{{$package->id}}][price]" value="{{$package->price}}" class="vafadar-input" placeholder="قیمت">
-                                </div>
-                                <div>
-                                    <label class="vafadar-label"> تخفیف</label>
-                                    <input type="number" name="createdPackages[{{$package->id}}][discunt]" value="{{$package->discunt}}" class="vafadar-input" placeholder="تخفیف">
-                                </div>
-
-                                <!-- توگل‌های پکیج -->
-                                <div class="flex items-center gap-6 flex-wrap">
-                                    <div class="vafadar-toggle-label">
-                                        <span> فعال</span>
-                                        <div class="vafadar-toggle {{$package->is_active == 1 ? 'active' : ''}}" onclick="toggleState(this)">
-                                            <div class="vafadar-toggle-dot"></div>
-                                        </div>
-                                        <input type="number" name="createdPackages[{{$package->id}}][is_active]" value="{{$package->is_active}}" class="absolute invisible">
-                                    </div>
-                                    <div class="vafadar-toggle-label">
-                                        <span> ویژه</span>
-                                        <div class="vafadar-toggle {{$package->featured == 1 ? 'active' : ''}}" onclick="toggleState(this)">
-                                            <div class="vafadar-toggle-dot"></div>
-                                        </div>
-                                        <input type="number" name="createdPackages[{{$package->id}}][featured]" value="{{$package->featured}}" class="absolute invisible">
-                                    </div>
-                                </div>
-
-                                <!-- تصاویر پکیج -->
-                                @if(count($package['medias']) > 0)
-                                    <div class="full">
-                                        <label class="vafadar-label"> تصاویر پک</label>
-                                        <div class="vafadar-media-container" style="min-height:100px;">
-                                            @foreach($package['medias'] as $media)
-                                                <div class="vafadar-media-item">
-                                                    <img src="{{asset('storage/package_medias/'.$media->path)}}" alt="" style="min-width:90px;max-width:90px;height:90px;">
-                                                    <span class="{{$media->is_main == 1 ? 'vafadar-tag-main' : 'vafadar-tag-gallery'}}">
-                                                        {{$media->is_main == 1 ? 'اصلی' : 'گالری'}}
-                                                    </span>
-                                                    <div onclick="getDeletedPackageMedias(this, {{$media->id}})" class="vafadar-btn-danger" style="position:absolute;top:-6px;right:-6px;width:24px;height:24px;font-size:10px;">✕</div>
-                                                </div>
-                                            @endforeach
-                                        </div>
-                                    </div>
-                                @endif
-
-                                <!-- ویژگی‌های پکیج -->
-                                @if(count($package['attributes']) > 0)
-                                    <div class="full">
-                                        <label class="vafadar-label"> ویژگی‌های پک</label>
-                                        <div class="flex gap-3 flex-wrap">
-                                            @foreach($package['attributes'] as $attribute)
-                                                <div class="vafadar-attr-item">
-                                                    <span style="font-weight:700;color:#1e293b;padding-right:4px;">{{$attribute->title}}:</span>
-                                                    <input type="text" value="{{$attribute->pivot->value}}" readonly style="width:80px;font-weight:600;color:#64748b;">
-                                                    <div onclick="getDeletedPackageAttributes(this, {{$attribute->pivot->id}})" class="remove" style="width:22px;height:22px;font-size:9px;">✕</div>
-                                                </div>
-                                            @endforeach
-                                        </div>
-                                    </div>
-                                @endif
-
-                                <!-- افزودن ویژگی به پکیج -->
-                                <div class="full">
-                                    <label class="vafadar-label"> افزودن ویژگی به پک</label>
-                                    <div class="packageAttributesList flex flex-wrap gap-2 mt-2"></div>
-                                    <div id="{{$package->id}}" class="vafadar-btn-warning w-full mt-2" onclick="createOldPackageAttributeFunction(this, false)">➕ افزودن ویژگی</div>
-                                </div>
-
-                            </div>
-                            <div onclick="deleteCreatedPackage(this, {{$package->id}})" class="package-remove">✕</div>
-                        </div>
-                    @endforeach
+            <div class="vafadar-attributes-section mt-6">
+                <div class="vafadar-attributes-title2"> ویژگی‌های دستی برای محصول</div>
+                
+                <div class="flex flex-wrap gap-2 mt-3" id="product_attributes_list"></div>
+                
+                <div class="vafadar-btn-success w-full mt-3" id="add_pro_attribute_button" onclick="add_pro_attribute(this)">
+                    ➕ افزودن ویژگی
                 </div>
-            @endif
 
+            </div>
             <!-- ===== دکمه ثبت ===== -->
             <div class="flex justify-end mt-6 pt-6 border-t" style="border-color:var(--metronic-border);">
                 <button type="submit" class="vafadar-btn">
@@ -874,15 +797,6 @@ $count = 1;
         el.closest('.vafadar-media-item').remove();
     }
 
-    function getDeletedPackageMedias(el, media_id) {
-        let input = document.createElement('input');
-        input.setAttribute('type', 'hidden');
-        input.setAttribute('name', 'deletedPackageMedias[]');
-        input.setAttribute('value', media_id);
-        form.append(input);
-        el.closest('.vafadar-media-item').remove();
-    }
-
     // ===== DELETE ATTRIBUTES =====
     function getDeletedProductAttributes(el, att_id) {
         let input = document.createElement('input');
@@ -891,26 +805,6 @@ $count = 1;
         input.setAttribute('value', att_id);
         form.append(input);
         el.closest('.vafadar-attr-item').remove();
-    }
-
-    function getDeletedPackageAttributes(el, att_id) {
-        let input = document.createElement('input');
-        input.setAttribute('type', 'hidden');
-        input.setAttribute('name', 'deletedPackageAttributes[]');
-        input.setAttribute('value', att_id);
-        form.append(input);
-        el.closest('.vafadar-attr-item').remove();
-    }
-
-    // ===== DELETE PACKAGE =====
-    function deleteCreatedPackage(el, package_id) {
-        if (!confirm('آیا از حذف این پک مطمئن هستید؟')) return;
-        let input = document.createElement('input');
-        input.setAttribute('type', 'hidden');
-        input.setAttribute('name', 'deleteCreatedPackage[]');
-        input.setAttribute('value', package_id);
-        form.append(input);
-        el.closest('.vafadar-package-box').remove();
     }
 
     // ===== DELETE ATTRIBUTE TAG =====
@@ -1014,7 +908,33 @@ $count = 1;
         categoryAttributes(document.getElementById('category_select_element') , false);
         console.log(select.value)
     }
-
+    let product_attributes_list=document.getElementById('product_attributes_list');
+    let add_pro_attribute_button=document.getElementById('add_pro_attribute_button');
+    function add_pro_attribute(el) {
+        let xmark = document.createElement('div');
+        let div= document.createElement('div');
+        let input2= document.createElement('input');
+        let input1= document.createElement('input');
+        div.classList=`relative w-full p-2 border-1 rounded-xl flex gap-2`;
+        input1.setAttribute('name', 'product_attributes_key[]');
+        input1.classList = 'vafadar-input attributes_inputs max-w-4/12 min-w-4/12 ';
+        input1.setAttribute('type', 'text');
+        input1.setAttribute('required', true);
+        input2.setAttribute('type', 'text');
+        input2.setAttribute('required', true);
+        input2.setAttribute('name', 'product_attributes_value[]');
+        input2.classList = 'vafadar-input attributes_inputs max-w-8/12 min-w-8/12';
+        input1.placeholder='نام ویژگی';
+        input2.placeholder='مقدار ویژگی';
+        xmark.classList = 'absolute remove top-0 -right-5 bg-red-300 hover:bg-red-500 p-1 rounded-full cursor-pointer';
+        xmark.innerHTML = '✕';
+        xmark.setAttribute('onclick', 'deleteAttribute(this)');
+        div.append(input1);
+        div.append(input2);
+        div.append(xmark);
+        product_attributes_list.append(div)
+        console.log(select.value)
+    }
 </script>
 
 @endsection

@@ -672,11 +672,19 @@
                     <div class="line"></div>
                 </div>
                 <div class="vafadar-media-grid">
+                    @if($product->image!=null)
+                    <div class="vafadar-media-item">
+                        <img src="{{asset('storage/product_medias/'.$product->image)}}" alt="{{$product->title}}">
+                        <span class="vafadar-media-badge ">
+                            اصلی
+                        </span>
+                    </div>
+                    @endif
                     @forelse($product['medias'] as $media)
                         <div class="vafadar-media-item">
                             <img src="{{asset('storage/product_medias/'.$media->path)}}" alt="{{$product->title}}">
-                            <span class="vafadar-media-badge {{$media->is_main ? 'main' : 'gallery'}}">
-                                {{$media->is_main ? 'اصلی' : 'گالری'}}
+                            <span class="vafadar-media-badge bg-green-300 rounded-xl">
+                                گالری
                             </span>
                         </div>
                     @empty
@@ -685,59 +693,6 @@
                 </div>
             </div>
 
-            <!-- ===== پکیج‌ها ===== -->
-            <div class="vafadar-section">
-                <div class="vafadar-section-title">
-                    <h3> پکیج‌ها</h3>
-                    <div class="line"></div>
-                </div>
-                
-                @forelse($product['packages'] as $package)
-                <div class="vafadar-package-card">
-                    <div class="package-header">
-                        <span class="package-title"> پکیج #{{$loop->iteration}}</span>
-                        <div class="flex gap-2 flex-wrap">
-                            <span class="package-badge {{$package->is_active ? 'active' : 'inactive'}}">
-                                {{$package->is_active ? '✅ فعال' : '❌ غیرفعال'}}
-                            </span>
-                            @if($package->featured)
-                                <span class="package-badge featured">⭐ ویژه</span>
-                            @endif
-                        </div>
-                    </div>
-                    
-                    <div class="package-info">
-                        <div class="package-info-item">
-                            <span class="label"> توضیحات</span>
-                            <span class="value">{{$package->description}}</span>
-                        </div>
-                        <div class="package-info-item">
-                            <span class="label"> خلاصه</span>
-                            <span class="value">{{$package->summary}}</span>
-                        </div>
-                        <div class="package-info-item">
-                            <span class="label"> قیمت</span>
-                            <span class="value">{{$package->price}} تومان</span>
-                        </div>
-                        <div class="package-info-item">
-                            <span class="label"> تخفیف</span>
-                            <span class="value">{{$package->discunt}}%</span>
-                        </div>
-                        <div class="package-info-item">
-                            <span class="label"> موجودی</span>
-                            <span class="value">{{$package->stock}} عدد</span>
-                        </div>
-                    </div>
-
-                    <div class="package-actions">
-                        <a href="{{route('product.singlePackage',['package'=>$package->id])}}" class="action-btn view"> نمایش</a>
-                        <a href="{{route('product.edit',['product'=>$product->id])}}" class="action-btn edit"> ویرایش</a>
-                    </div>
-                </div>
-                @empty
-                <span class="text-[#4a6a7a] text-sm">هیچ پکیجی ثبت نشده است</span>
-                @endforelse
-            </div>
             <!-- ===== دکمه‌های اکشن ===== -->
             <div class="vafadar-action-buttons">
                 <a href="{{route('product.edit',['product'=>$product->id])}}" class="vafadar-action-btn-lg edit">
