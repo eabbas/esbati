@@ -698,7 +698,7 @@ $count = 1;
                                 <span class=" vafadar-tag-main">
                                     اصلی
                                 </span>
-                                <div onclick="getDeletedProductMedias(this, {{$product->id}})" class="vafadar-btn-danger" style="position:absolute;top:-6px;right:-6px;width:24px;height:24px;font-size:10px;">✕</div>
+                                <div onclick="getDeletedProductMedias(this, {{$product->id}},'main')" class="vafadar-btn-danger" style="position:absolute;top:-6px;right:-6px;width:24px;height:24px;font-size:10px;">✕</div>
                             </div>
                         @endif
                         @foreach($product['medias'] as $media)
@@ -707,7 +707,7 @@ $count = 1;
                                 <span class=" vafadar-tag-gallery">
                                     گالری
                                 </span>
-                                <div onclick="getDeletedProductMedias(this, {{$media->id}})" class="vafadar-btn-danger" style="position:absolute;top:-6px;right:-6px;width:24px;height:24px;font-size:10px;">✕</div>
+                                <div onclick="getDeletedProductMedias(this, {{$media->id}},'gallery')" class="vafadar-btn-danger" style="position:absolute;top:-6px;right:-6px;width:24px;height:24px;font-size:10px;">✕</div>
                             </div>
                         @endforeach
                     </div>
@@ -788,11 +788,18 @@ $count = 1;
     }
 
     // ===== DELETE MEDIA =====
-    function getDeletedProductMedias(el, media_id) {
+    function getDeletedProductMedias(el, media_id , state) {
         let input = document.createElement('input');
-        input.setAttribute('type', 'hidden');
-        input.setAttribute('name', 'deletedProductMedias[]');
-        input.setAttribute('value', media_id);
+        if(state == 'main'){
+            input.setAttribute('type', 'hidden');
+            input.setAttribute('name', 'deletedMainImage');
+            input.setAttribute('value', media_id);
+        }
+        if(state == 'gallery'){
+            input.setAttribute('type', 'hidden');
+            input.setAttribute('name', 'deletedProductMedias[]');
+            input.setAttribute('value', media_id);
+        }
         form.append(input);
         el.closest('.vafadar-media-item').remove();
     }

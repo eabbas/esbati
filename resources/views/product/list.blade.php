@@ -494,9 +494,9 @@
                             <span class="vafadar-product-badge">#{{$product->id}}</span>
                         </td>
                         <td>
-                            @if(isset($product->is_main_media))
+                            @if($product->image!=null)
                                 <img class="vafadar-thumb" 
-                                     src="{{asset('storage/product_medias/'.$product->is_main_media)}}" 
+                                     src="{{asset('storage/product_medias/'.$product->image)}}" 
                                      alt="{{$product->title}}">
                             @else
                                 <div class="vafadar-thumb-placeholder"></div>

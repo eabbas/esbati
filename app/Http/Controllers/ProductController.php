@@ -154,11 +154,6 @@ class ProductController extends Controller
             }
             $product->categories;
             $product->medias;
-            foreach ($product['medias'] as $media) {
-                if($media->is_main==1){
-                    $product->is_main_media=$media->path;
-                }
-            }
             if ($product->discunt) {
                 $campare = $product->price - $product->discunt;
                 $x = $campare / $product->price;
@@ -228,23 +223,17 @@ class ProductController extends Controller
             }
 
         }
+        if(isset($request['deletedMainImage'])){
+            Storage::disk('public')->delete("product_medias/".$product->image);
+            $product->image=null;
+        }
 
+        $path=null;
         if(isset($request['is_main'])){
-            $media=product_media::where('product_id',$product->id)->where('is_main',1)->first();
-            if($media){
-                $media->is_main=0;
-                $media->save();
-            }
-            $fullName=Str::uuid().$request->is_main->getClientOriginalName();
-            $extension=$request->is_main->getClientOriginalExtension();
-            $request->is_main->storeAs("product_medias","$fullName","public");
-            product_media::create([
-                'path'=>$fullName,
-                'type'=>$extension,
-                'product_id'=>$product->id,
-                'is_main'=>1,
-                'is_active'=>1,
-            ]);
+            $path=Str::uuid().$request->is_main->getClientOriginalName();
+        // dd($path);
+            $request->is_main->storeAs('product_medias',$path,"public");
+            $product["image"]=$path;
         }
         if(isset($request['gallery'])){
             foreach ($request['gallery'] as $gallery) {
@@ -265,6 +254,11 @@ class ProductController extends Controller
         if(isset($request['deletedProductAttributes'])){
             foreach ($request['deletedProductAttributes'] as $attribute_id) {
                 $att=product_attribute::find($attribute_id);
+                $attribute=attribute::find($att->attribute_id);
+                // dd($attribute);
+                if($attribute->product_id!=null){
+                    $attribute->delete();
+                }
                 if($att){
                     $att->delete();
                 }
@@ -275,8 +269,31 @@ class ProductController extends Controller
         if(isset($request['attributes_id'])){
             foreach ($request['attributes_id'] as $key => $id) {
                 product_attribute::create([
-                    'product_id'=>$product->id,
+                    'product_id'=>$createdProduct->id,
                     'attribute_id'=>$id,
+                    'value'=>$request['attributes_value'][$key],
+                ]);
+            }
+        }
+        $attributes=[];
+        if(isset($request['product_attributes_key'])){
+            foreach ($request['product_attributes_key'] as $attribute) {
+                $permision=true;
+                if($attribute==null){
+                    $permision=false;
+                }
+                if($permision){
+                    $attribute=attribute::create([
+                        "title"=>$attribute,
+                        "product_id"=>$createdProduct->id,
+                    ]);
+                    $attributes[]=$attribute->id;
+                }
+            }
+            foreach ($attributes as $key=>$attribute_id) {
+                product_attribute::create([
+                    'product_id'=>$createdProduct->id,
+                    'attribute_id'=>$attribute_id,
                     'value'=>$request['attributes_value'][$key],
                 ]);
             }
@@ -284,6 +301,7 @@ class ProductController extends Controller
 
 
 
+        $product->save();
 
         return to_route('product.list');
 
@@ -292,14 +310,14 @@ class ProductController extends Controller
     }
     public function delete(product $product){
         $product->medias;
-        $product->packages;
+        Storage::disk('public')->delete("product_medias/".$product->image);
         foreach ($product['medias'] as $media) {
             Storage::disk('public')->delete("product_medias/".$media->path);
             $media->delete();
         }
+        attribute::where('product_id',$product->id)->delete();
         product_attribute::where('product_id',$product->id)->delete();
         $product->delete();
-
         return to_route('product.list');
         // dd('delete');
     }
@@ -397,13 +415,6 @@ class ProductController extends Controller
             // dd($products);
         return view('search',['products'=>$products,'searchTitle'=>$request->title,'categories'=>$categories,'brands'=>$brands,'bishtarin'=>$bishtarin,'kamtarin'=>$kamtarin]);
     }
-    // public function getFilteredProducts(Request $request){
-
-    //     // Log::info($filters);
-    //     dd($request['filters']);
-
-    //     return response()->json($filters);
-    // }
     public function getFilters(Request $request){
         $filters = $request->input('filters');
         // Log::info($filters);
