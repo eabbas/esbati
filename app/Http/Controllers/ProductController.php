@@ -10,10 +10,7 @@ use App\Models\user;
 use App\Models\product_category;
 use App\Models\product_media;
 use App\Models\product_attribute;
-use App\Models\package;
 use App\Models\headerSetting;
-use App\Models\attribute_package;
-use App\Models\package_media;
 use App\Models\brand;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
@@ -62,7 +59,14 @@ class ProductController extends Controller
         }else{
             $featured=0;
         }
-        // ایجاد محصول
+        //ذخیره کردن عکس اصلی برای پروداکت
+        $path=null;
+        if(isset($request['is_main'])){
+            $path=Str::uuid().$request->is_main->getClientOriginalName();
+        // dd($path);
+            $request->is_main->storeAs('product_medias',$path,"public");
+        }
+            // ایجاد محصول
         $createdProduct=product::create([
             'title'=>$validation['title'],
             'description'=>$request['description'],
@@ -74,26 +78,13 @@ class ProductController extends Controller
             'slug'=>$request->slug,
             'stock'=>$request['stock'],
             'price'=>$request['price'],
+            'image'=>$path,
             'discunt'=>$request->discunt,
-        ]);
 
-        //ذخیره کردن عکس اصلی برای پروداکت
-        if(isset($request['is_main'])){
-            $fullName=Str::uuid().$request->is_main->getClientOriginalName();
-            $extension=$request->is_main->getClientOriginalExtension();
-            $request->is_main->storeAs('product_medias',"$fullName","public");
-            product_media::create([
-                'path'=>$fullName,
-                'product_id'=>$createdProduct->id,
-                'is_main'=>1,
-                'is_active'=>1,
-                'type'=>$extension,
-            ]);
-        }
+        ]);
 
         //ذخیره کردن عکس های گالری
         if(isset($request['gallery'])){
-
             foreach ($request->gallery as $image) {
                 $fullNameGallery=Str::uuid().$image->getClientOriginalName();
                 $extensionGallery=$image->getClientOriginalExtension();
@@ -101,7 +92,6 @@ class ProductController extends Controller
                 product_media::create([
                     'path'=>$fullNameGallery,
                     'product_id'=>$createdProduct->id,
-                    'is_main'=>0,
                     'is_active'=>1,
                     'type'=>$extensionGallery,
                 ]);
@@ -114,18 +104,6 @@ class ProductController extends Controller
             'category_id'=>$request->category,
         ]);
 
-        //ایجاد پروداکت اتریبیوت
-        // if(isset($request['attributes'])){
-        //     foreach ($request['attributes'] as $att_id => $atts_array) {
-        //         foreach ($atts_array as $attribute_value) {
-        //             product_attribute::create([
-        //                 'product_id'=>$createdProduct->id,
-        //                 'attribute_id'=>$att_id,
-        //                 'value'=>$attribute_value,
-        //             ]);
-        //         }
-        //     }
-        // }
 
         if(isset($request['attributes_id'])){
             foreach ($request['attributes_id'] as $key => $id) {
@@ -136,91 +114,27 @@ class ProductController extends Controller
                 ]);
             }
         }
-        
-
-            //////////////////////////////   قسمت پروداکت  🔼
-
-            /////////////////////////////////   قسمت پکیج  🔽
-        if(isset($request['packages'])){
-
-            foreach ($request->packages as $package) {
-                if(isset($package['is_active'])){
-                    $is_active=1;
-                }else{
-                    $is_active=0;
+        $attributes=[];
+        if(isset($request['product_attributes_key'])){
+            foreach ($request['product_attributes_key'] as $attribute) {
+                $permision=true;
+                if($attribute==null){
+                    $permision=false;
                 }
-                if(isset($package['featured'])){
-                    $featured=1;
-                }else{
-                    $featured=0;
-                }
-
-                // ذخیره پکیچ
-                $creratedPackage=package::create([
-                    'product_id'=>$createdProduct->id,
-                    'description'=>$package['description'],
-                    'summary'=>$package['summary'],
-                    'is_active'=>$is_active,
-                    'stock'=>$package['stock'],
-                    'price'=>$package['price'],
-                    'discunt'=>$package['discunt'],
-                    'featured'=>$featured,
-                ]);
-                
-                //ذخیره عکس پکیچ ها
-                if(isset($package['is_main'])){
-                    $fullName_ismain=Str::uuid().$package['is_main']->getClientOriginalName();
-                    $extension_ismain=$package['is_main']->getClientOriginalExtension();
-                    $package['is_main']->storeAs('package_medias',"$fullName_ismain","public");
-                    package_media::create([
-                        'path'=>$fullName_ismain,
-                        'package_id'=>$creratedPackage->id,
-                        'is_main'=>1,
-                        'is_active'=>1,
-                        'type'=>$extension_ismain,
+                if($permision){
+                    $attribute=attribute::create([
+                        "title"=>$attribute,
+                        "product_id"=>$createdProduct->id,
                     ]);
+                    $attributes[]=$attribute->id;
                 }
-
-                //ذخیره کردن عکس های گالری
-                if(isset($package['gallery'])){
-
-                    foreach ($package['gallery'] as $image) {
-                        $fullName_package_gallery=Str::uuid().$image->getClientOriginalName();
-                        $extension_package_gallery=$image->getClientOriginalExtension();
-                        $image->storeAs('package_medias',"$fullName_package_gallery","public");
-                        package_media::create([
-                            'path'=>$fullName_package_gallery,
-                            'package_id'=>$creratedPackage->id,
-                            'is_main'=>0,
-                            'is_active'=>1,
-                            'type'=>$extension_package_gallery,
-                        ]);
-                    }
-                }
-
-                //افزودن اتریبیوت برای پکیج
-                // if(isset($package['attributes'])){
-                //     foreach ($package['attributes'] as $att_id => $atts_array) {
-                //         foreach ($atts_array as $attribute_value) {
-                //             attribute_package::create([
-                //                 'attribute_id'=>$att_id,
-                //                 'package_id'=>$creratedPackage->id,
-                //                 'value'=>$attribute_value,
-                //             ]);
-                //         }
-                //     }
-                // }
-                if(isset($package['attribute_id'])){
-                    foreach ($package['attribute_value'] as $key => $id) {
-                        product_attribute::create([
-                            'product_id'=>$createdProduct->id,
-                            'attribute_id'=>$id,
-                            'value'=>$package['attribute_value'][$key],
-                        ]);
-                    }
-                }
-            
-
+            }
+            foreach ($attributes as $key=>$attribute_id) {
+                product_attribute::create([
+                    'product_id'=>$createdProduct->id,
+                    'attribute_id'=>$attribute_id,
+                    'value'=>$request['attributes_value'][$key],
+                ]);
             }
         }
 
@@ -240,11 +154,6 @@ class ProductController extends Controller
             }
             $product->categories;
             $product->medias;
-            foreach ($product['medias'] as $media) {
-                if($media->is_main==1){
-                    $product->is_main_media=$media->path;
-                }
-            }
             if ($product->discunt) {
                 $campare = $product->price - $product->discunt;
                 $x = $campare / $product->price;
@@ -264,41 +173,8 @@ class ProductController extends Controller
         }
         $product->categories;
         $product->medias;
-        $packages=$product->packages;
         $product->attributes;
-        foreach ($product->packages as $package) {
-            $package->attributes;
-            $package->medias;
-        }
-        // $is_main='';
-        // $gallery=[];
-        // foreach ($product->medias as $media) {
-        //     if($media->is_main==1){
-        //         $is_main=$media->path;
-        //     }else{
-        //         $gallery[]=$media->path;
-        //     }
-        // }
-        // $product->is_main=$is_main;
-        // $product->gallery=$gallery;
-        // dd($product);
         return view("product.single",['product'=>$product]);
-        // dd('single');
-    }
-    public function singlePackage(Package $package){
-        $package->product;
-        $result= brand::where('id',$package->product->brand_id)->first();
-        if($result){
-            $package->product->brand_id=brand::find($package->product->brand_id)->title;
-        }else{
-            $package->product->brand_id='ندارد';
-        }
-        $package->product->categories;
-
-        $package->medias;
-        $packages=$package->packages;
-        $package->attributes;
-        return view("product.singlePackage",['package'=>$package ]);
         // dd('single');
     }
     public function edit(product $product){
@@ -309,11 +185,6 @@ class ProductController extends Controller
         $product->categories;
         $product->medias;
         $product->attributes;
-        $packages=$product->packages;
-        foreach ($product->packages as $package) {
-            $package->attributes;
-            $package->medias;
-        }
         // dd($product->packages);
         return view('product.edit',['categories'=>$categories,'brands'=>$brands,'product'=>$product]);
         // dd('edit');
@@ -352,23 +223,17 @@ class ProductController extends Controller
             }
 
         }
+        if(isset($request['deletedMainImage'])){
+            Storage::disk('public')->delete("product_medias/".$product->image);
+            $product->image=null;
+        }
 
+        $path=null;
         if(isset($request['is_main'])){
-            $media=product_media::where('product_id',$product->id)->where('is_main',1)->first();
-            if($media){
-                $media->is_main=0;
-                $media->save();
-            }
-            $fullName=Str::uuid().$request->is_main->getClientOriginalName();
-            $extension=$request->is_main->getClientOriginalExtension();
-            $request->is_main->storeAs("product_medias","$fullName","public");
-            product_media::create([
-                'path'=>$fullName,
-                'type'=>$extension,
-                'product_id'=>$product->id,
-                'is_main'=>1,
-                'is_active'=>1,
-            ]);
+            $path=Str::uuid().$request->is_main->getClientOriginalName();
+        // dd($path);
+            $request->is_main->storeAs('product_medias',$path,"public");
+            $product["image"]=$path;
         }
         if(isset($request['gallery'])){
             foreach ($request['gallery'] as $gallery) {
@@ -389,6 +254,11 @@ class ProductController extends Controller
         if(isset($request['deletedProductAttributes'])){
             foreach ($request['deletedProductAttributes'] as $attribute_id) {
                 $att=product_attribute::find($attribute_id);
+                $attribute=attribute::find($att->attribute_id);
+                // dd($attribute);
+                if($attribute->product_id!=null){
+                    $attribute->delete();
+                }
                 if($att){
                     $att->delete();
                 }
@@ -396,211 +266,42 @@ class ProductController extends Controller
 
         }
 
-        // if(isset($request['attributes'])){
-        //     foreach ($request['attributes'] as $att_id => $atts_array) {
-        //         foreach ($atts_array as $attribute_value) {
-        //             product_attribute::create([
-        //                 'product_id'=>$product->id,
-        //                 'attribute_id'=>$att_id,
-        //                 'value'=>$attribute_value,
-        //             ]);
-        //         }
-        //     }
-        // }
         if(isset($request['attributes_id'])){
             foreach ($request['attributes_id'] as $key => $id) {
                 product_attribute::create([
-                    'product_id'=>$product->id,
+                    'product_id'=>$createdProduct->id,
                     'attribute_id'=>$id,
                     'value'=>$request['attributes_value'][$key],
                 ]);
             }
         }
-
- 
-        ////// آپدیت و جذف مدیا ها و اتریبیوت پکیج های قدیمی 
-        if(isset($request['createdPackages'])){
-            foreach ($request['createdPackages'] as $package_id => $oldpackage) {
-                $package=package::find($package_id);
-                $package["description"]=$oldpackage['description'];
-                $package["summary"]=$oldpackage['summary'];
-                $package["stock"]=$oldpackage['stock'];
-                $package["price"]=$oldpackage['price'];
-                $package["discunt"]=$oldpackage['discunt'];
-                $package["is_active"]=$oldpackage['is_active'];
-                $package["featured"]=$oldpackage['featured'];
-                $package->save();
-                // if(isset($oldpackage['attributes'])){
-                //     foreach ($oldpackage['attributes'] as $att_id => $atts_array) {
-                //         foreach ($atts_array as $attribute_value) {
-                //             attribute_package::create([
-                //                 'attribute_id'=>$att_id,
-                //                 'package_id'=>$package->id,
-                //                 'value'=>$attribute_value,
-                //             ]);
-                //         }
-                //     }
-                // }
-                if(isset($oldpackage['attribute_id'])){
-                    foreach ($oldpackage['attribute_id'] as $key => $id) {
-                        attribute_package::create([
-                            'attribute_id'=>$id,
-                            'package_id'=>$package->id,
-                            'value'=>$oldpackage['attribute_value'][$key],
-                        ]);
-                    }
+        $attributes=[];
+        if(isset($request['product_attributes_key'])){
+            foreach ($request['product_attributes_key'] as $attribute) {
+                $permision=true;
+                if($attribute==null){
+                    $permision=false;
                 }
-                                
-                //ذخیره عکس پکیچ ها
-                if(isset($oldpackage['is_main'])){
-                    $fullName=Str::uuid().$oldpackage['is_main']->getClientOriginalName();
-                    $extension=$oldpackage['is_main']->getClientOriginalExtension();
-                    $oldpackage['is_main']->storeAs('package_medias',"$fullName","public");
-                    package_media::create([
-                        'path'=>$fullName,
-                        'package_id'=>$package->id,
-                        'is_main'=>1,
-                        'is_active'=>1,
-                        'type'=>$extension,
+                if($permision){
+                    $attribute=attribute::create([
+                        "title"=>$attribute,
+                        "product_id"=>$createdProduct->id,
                     ]);
-                }
-
-                //ذخیره کردن عکس های گالری
-                if(isset($oldpackage['gallery'])){
-                    foreach ($oldpackage['gallery'] as $image) {
-                        $fullName=Str::uuid().$image->getClientOriginalName();
-                        $extension=$image->getClientOriginalExtension();
-                        $image->storeAs('package_medias',"$fullName","public");
-                        package_media::create([
-                            'path'=>$fullName,
-                            'package_id'=>$package->id,
-                            'is_main'=>0,
-                            'is_active'=>1,
-                            'type'=>$extension,
-                        ]);
-                    }
-                }
-
-            }
-        }
-
-        if(isset($request['deletedPackageMedias'])){
-            foreach ($request['deletedPackageMedias'] as $media_id) {
-                $medias=package_media::where('id',$media_id)->get();
-                foreach ($medias as $media) {
-                    Storage::disk('public')->delete("package_medias/".$media->path);
-                    $media->delete();
+                    $attributes[]=$attribute->id;
                 }
             }
-        }
-        /////// قسمت حذف و ایجاد اتریبیوت های محصول
-        if(isset($request['deletedPackageAttributes'])){
-            foreach ($request['deletedPackageAttributes'] as $attribute_id) {
-                attribute_package::find($attribute_id)->delete();
-            }
-
-        }
-
-        
-
-        if(isset($request['deleteCreatedPackage'])){
-            foreach ($request['deleteCreatedPackage'] as $package_id) {
-                $package=package::find($package_id); 
-                $medias=package_media::where('package_id',$package_id)->get();
-                foreach ($medias as $media) {
-                    Storage::disk('public')->delete("package_medias/".$media->path);
-                    $media->delete();
-                }
-                attribute_package::where('package_id',$package->id)->delete();
-                $package->delete();
-            }
-        }
-
-
-        ///// ایجاد پکیج جدید 
-
-        if(isset($request['packages'])){
-
-            foreach ($request->packages as $package) {
-                if(isset($package['is_active'])){
-                    $is_active=1;
-                }else{
-                    $is_active=0;
-                }
-                if(isset($package['featured'])){
-                    $featured=1;
-                }else{
-                    $featured=0;
-                }
-
-                // ذخیره پکیچ
-                $creratedPackage=package::create([
-                    'product_id'=>$product->id,
-                    'description'=>$package['description'],
-                    'summary'=>$package['summary'],
-                    'is_active'=>$is_active,
-                    'stock'=>$package['stock'],
-                    'price'=>$package['price'],
-                    'discunt'=>$package['discunt'],
-                    'featured'=>$featured,
+            foreach ($attributes as $key=>$attribute_id) {
+                product_attribute::create([
+                    'product_id'=>$createdProduct->id,
+                    'attribute_id'=>$attribute_id,
+                    'value'=>$request['attributes_value'][$key],
                 ]);
-                
-                //ذخیره عکس پکیچ ها
-                if(isset($package['is_main'])){
-                    $fullName=Str::uuid().$package['is_main']->getClientOriginalName();
-                    $extension=$package['is_main']->getClientOriginalExtension();
-                    $package['is_main']->storeAs('package_medias',"$fullName","public");
-                    package_media::create([
-                        'path'=>$fullName,
-                        'package_id'=>$creratedPackage->id,
-                        'is_main'=>1,
-                        'is_active'=>1,
-                        'type'=>$extension,
-                    ]);
-                }
-
-                //ذخیره کردن عکس های گالری
-                if(isset($package['gallery'])){
-
-                    foreach ($package['gallery'] as $image) {
-                        $fullName=Str::uuid().$image->getClientOriginalName();
-                        $extension=$image->getClientOriginalExtension();
-                        $image->storeAs('package_medias',"$fullName","public");
-                        package_media::create([
-                            'path'=>$fullName,
-                            'package_id'=>$creratedPackage->id,
-                            'is_main'=>0,
-                            'is_active'=>1,
-                            'type'=>$extension,
-                        ]);
-                    }
-                }
-
-                //افزودن اتریبیوت برای پکیج
-                // if(isset($package['attributes'])){
-                //     foreach ($package['attributes'] as $att_id => $atts_array) {
-                //         foreach ($atts_array as $attribute_value) {
-                //             attribute_package::create([
-                //                 'attribute_id'=>$att_id,
-                //                 'package_id'=>$creratedPackage->id,
-                //                 'value'=>$attribute_value,
-                //             ]);
-                //         }
-                //     }
-                // }
-                if(isset($package['attribute_id'])){
-                    foreach ($package['attribute_id'] as $key => $id) {
-                        attribute_package::create([
-                            'attribute_id'=>$id,
-                            'package_id'=>$creratedPackage->id,
-                            'value'=>$package['attribute_value'][$key],
-                        ]);
-                    }
-                }
             }
         }
 
 
+
+        $product->save();
 
         return to_route('product.list');
 
@@ -609,24 +310,14 @@ class ProductController extends Controller
     }
     public function delete(product $product){
         $product->medias;
-        $product->packages;
+        Storage::disk('public')->delete("product_medias/".$product->image);
         foreach ($product['medias'] as $media) {
             Storage::disk('public')->delete("product_medias/".$media->path);
             $media->delete();
         }
+        attribute::where('product_id',$product->id)->delete();
         product_attribute::where('product_id',$product->id)->delete();
-        foreach ($product['packages'] as $package) {
-            $package->medias;
-
-            foreach ($package['medias'] as $media) {
-                Storage::disk('public')->delete("package_medias/".$media->path);
-                $media->delete();
-            }
-            attribute_package::where('package_id',$package->id)->delete();
-            $package->delete();
-        }
         $product->delete();
-
         return to_route('product.list');
         // dd('delete');
     }
@@ -634,10 +325,6 @@ class ProductController extends Controller
         $attributes = $category->attributes->pluck('title' , 'id');
         return response()->json($attributes);
         // return response()->json($category);
-    }
-    public function packages(product $product){
-        $packages=$product->packages;
-        return view('product.packages',['packages'=>$packages]);
     }
     public function attributes(product $product){
         $attribut_array=[];
@@ -728,13 +415,6 @@ class ProductController extends Controller
             // dd($products);
         return view('search',['products'=>$products,'searchTitle'=>$request->title,'categories'=>$categories,'brands'=>$brands,'bishtarin'=>$bishtarin,'kamtarin'=>$kamtarin]);
     }
-    // public function getFilteredProducts(Request $request){
-
-    //     // Log::info($filters);
-    //     dd($request['filters']);
-
-    //     return response()->json($filters);
-    // }
     public function getFilters(Request $request){
         $filters = $request->input('filters');
         // Log::info($filters);
